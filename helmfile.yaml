@@ -1,0 +1,92 @@
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 300
+  recreatePods: false
+  force: false
+  createNamespace: false
+
+---
+repositories:
+  - name: jupyterhub
+    url: https://jupyterhub.github.io/helm-chart/
+  - name: kamu
+    url: https://kamu-data.github.io/helm-charts/
+  - name: superset
+    url: https://apache.github.io/superset/
+
+---
+environments:
+  minikube:
+    kubeContext: minikube
+    values:
+      - defaults/environment.yaml
+      - environments/minikube/environment.yaml
+
+---
+releases:
+  {{- if .Environment.Values.kamuApiServer.enabled }}
+  - name: kamu-api-server
+    chart: {{ .Environment.Values.kamuApiServer.chart }}
+    version: {{ .Environment.Values.kamuApiServer.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/kamu-api-server.yaml
+      - environments/{{ $.Environment.Name }}/kamu-api-server/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/kamu-api-server/secrets.yaml
+  {{- end }}
+
+  {{- if .Environment.Values.kamuWebUi.enabled }}
+  - name: kamu-web-ui
+    chart: {{ .Environment.Values.kamuWebUi.chart }}
+    version: {{ .Environment.Values.kamuWebUi.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/kamu-web-ui.yaml
+      - environments/{{ $.Environment.Name }}/kamu-web-ui/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/kamu-web-ui/secrets.yaml
+  {{- end }}
+
+  {{- if .Environment.Values.jupyterHub.enabled }}
+  - name: jupyterhub
+    chart: {{ .Environment.Values.jupyterHub.chart }}
+    version: {{ .Environment.Values.jupyterHub.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/jupyterhub.yaml
+      - environments/{{ $.Environment.Name }}/jupyterhub/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/jupyterhub/secrets.yaml
+  {{- end }}
+
+  {{- if .Environment.Values.minio.enabled }}
+  - name: minio
+    chart: {{ .Environment.Values.minio.chart }}
+    version: {{ .Environment.Values.minio.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/minio.yaml
+      - environments/{{ $.Environment.Name }}/minio/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/minio/secrets.yaml
+  {{- end }}
+
+  {{- if .Environment.Values.superset.enabled }}
+  - name: superset
+    chart: {{ .Environment.Values.superset.chart }}
+    version: {{ .Environment.Values.superset.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/superset.yaml
+      - environments/{{ $.Environment.Name }}/superset/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/superset/secrets.yaml
+  {{- end }}
+...

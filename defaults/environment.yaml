@@ -1,0 +1,28 @@
+namespace: default
+
+# For latest versions see:
+# https://artifacthub.io/packages/search?org=kamu
+kamuApiServer:
+  enabled: false
+  chart: kamu/kamu-api-server
+  version: "0.12.2"
+
+kamuWebUi:
+  enabled: false
+  chart: kamu/kamu-web-ui
+  version: "0.15.0"
+
+jupyterHub:
+  enabled: false
+  chart: jupyterhub/jupyterhub
+  version: "1.0.1"
+
+minio:
+  enabled: false
+  chart: kamu/minio-devel
+  version: "0.1.1"
+
+superset:
+  enabled: false
+  chart: superset/superset
+  version: "0.10.14"

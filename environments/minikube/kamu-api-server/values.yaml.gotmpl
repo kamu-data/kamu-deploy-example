@@ -1,0 +1,17 @@
+app:
+  datasetRepositoryUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
+  authGithubClientId: "github-client-id"
+  authGithubClientSecret: "github-client-secret"
+  jwtSecret: "aW5zZWN1cmUtc2VjcmV0LWtleQo="
+
+  awsCredentials:
+    enabled: true
+    awsEndpoint: "http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000"
+    awsAccessKeyId: admin
+    awsSecretAccessKey: password123
+    awsRegion: us-east-1
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30201

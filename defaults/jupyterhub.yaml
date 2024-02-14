@@ -1,0 +1,39 @@
+cull:
+  # See culler settings description here:
+  # https://github.com/jupyterhub/jupyterhub-idle-culler#as-a-standalone-script
+  enabled: true
+  users: false # --cull-users
+  removeNamedServers: false # --remove-named-servers
+  timeout: 1800 # 30 min of inactivity
+  every: 600
+  concurrency: 10
+  maxAge: 18000 # delete after 5 hours, even if is active
+scheduling:
+  userScheduler:
+    enabled: false  # We don't use autoscaling and don't need tight packing of pods
+singleuser:
+  image:
+    name: ghcr.io/kamu-data/kamu-cli-demo-jupyter
+    tag: "0.10.2"
+  # Use old Jupyter Notebook interface by default
+  # See: https://z2jh.jupyter.org/en/latest/jupyterhub/customizing/user-environment.html#selecting-a-user-interface
+  defaultUrl: /tree/
+  # Disabling persistent storage
+  # To enable need to solve the problem of losing all data in home when storage is mounted
+  storage:
+    type: none
+hub:
+  extraConfig:
+    # Setting the `privileged` flag with `SYS_ADMIN` capabilities is necessary to allow `kamu-cli`
+    # to spawn podman containers from within the Jupyter pod.
+    myConfig.py: |
+      from kubernetes import client
+      def modify_pod_hook(spawner, pod):
+          pod.spec.containers[0].security_context = client.V1SecurityContext(
+              privileged=True,
+              capabilities=client.V1Capabilities(
+                  add=['SYS_ADMIN']
+              )
+          )
+          return pod
+      c.KubeSpawner.modify_pod_hook = modify_pod_hook

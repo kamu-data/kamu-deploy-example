@@ -1,0 +1,14 @@
+fullnameOverride: minio
+auth:
+  rootUser: admin
+  rootPassword: password123
+service:
+  nodePorts:
+    api: 30401
+    console: 30402
+persistence:
+  enabled: true
+provisioning:
+  enabled: true
+  buckets:
+    - name: datasets

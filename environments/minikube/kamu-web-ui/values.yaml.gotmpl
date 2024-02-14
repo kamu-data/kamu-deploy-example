@@ -1,0 +1,10 @@
+app:
+  config:
+    apiServerGqlUrl: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201/graphql"
+    githubClientId: "github-client-id"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30211
+    https: 30212
