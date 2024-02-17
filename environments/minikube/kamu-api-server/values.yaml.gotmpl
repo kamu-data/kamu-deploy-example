@@ -1,8 +1,89 @@
 app:
   datasetRepositoryUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
-  authGithubClientId: "github-client-id"
-  authGithubClientSecret: "github-client-secret"
-  jwtSecret: "aW5zZWN1cmUtc2VjcmV0LWtleQo="
+  jwtSecret: "secret123"
+  config:
+    auth:
+      providers:
+        - kind: dummy
+          accounts:
+            - accountId: kamu
+              accountName: kamu
+              displayName: kamu
+              accountType: User
+              avatarUrl: https://avatars.githubusercontent.com/u/50896974?s=200&v=4
+
+            - accountId: sh101-bowen
+              accountName: sh101-bowen
+              displayName: sh101-bowen
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+            - accountId: sh102-gambier
+              accountName: sh102-gambier
+              displayName: sh102-gambier
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+            - accountId: sh103-howe
+              accountName: sh103-howe
+              displayName: sh103-howe
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+            - accountId: sh104-granville
+              accountName: sh104-granville
+              displayName: sh104-granville
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+            - accountId: sh105-keats
+              accountName: sh105-keats
+              displayName: sh105-keats
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+            - accountId: sh106-seymour
+              accountName: sh106-seymour
+              displayName: sh106-seymour
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3118/3118054.png
+
+            - accountId: mim.dk
+              accountName: mim.dk
+              displayName: mim.dk
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3530/3530558.png
+            - accountId: mmo.gov.uk
+              accountName: mmo.gov.uk
+              displayName: mmo.gov.uk
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3530/3530558.png
+            - accountId: moa.gov.nl
+              accountName: moa.gov.nl
+              displayName: moa.gov.nl
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3530/3530558.png
+            - accountId: ofb.gouv.fr
+              accountName: ofb.gouv.fr
+              displayName: ofb.gouv.fr
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3530/3530558.png
+            - accountId: protectedseas.net
+              accountName: protectedseas.net
+              displayName: protectedseas.net
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/3530/3530558.png
+            - accountId: acme.fishing.co
+              accountName: acme.fishing.co
+              displayName: ACME Fishing Company
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/1090/1090630.png
+            - accountId: globalfishingwatch.org
+              accountName: globalfishingwatch.org
+              displayName: globalfishingwatch.org
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/512/744/744480.png
+            - accountId: bmis-bycatch.org
+              accountName: bmis-bycatch.org
+              displayName: Bycatch Management Information System
+              accountType: User
+              avatarUrl: https://cdn-icons-png.flaticon.com/128/10197/10197245.png
+
 
   awsCredentials:
     enabled: true

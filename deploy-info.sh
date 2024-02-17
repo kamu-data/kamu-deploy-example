@@ -5,10 +5,6 @@ set -euo pipefail
 export NAMESPACE=${NAMESPACE:-default}
 export MINIKUBE_HOST=$(minikube ip)
 
-kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
-
-helmfile sync --namespace "${NAMESPACE}" --environment minikube
-
 KAMU_API_PORT=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[0].nodePort}" services kamu-api-server)
 KAMU_WEB_UI_PORT=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[0].nodePort}" services kamu-web-ui)
 MINIO_API_PORT=$(kubectl get --namespace "${NAMESPACE}" -o jsonpath="{.spec.ports[0].nodePort}" services minio)
@@ -19,8 +15,8 @@ MINIO_PASSWORD=$(kubectl get --namespace "${NAMESPACE}" secret minio-creds -o js
 echo '==========================================================='
 echo '                      KAMU                                 '
 echo '-----------------------------------------------------------'
-echo "Kamu API:         http://$MINIKUBE_HOST:$KAMU_API_PORT"
 echo "Kamu Web UI:      http://$MINIKUBE_HOST:$KAMU_WEB_UI_PORT"
+echo "Kamu API:         http://$MINIKUBE_HOST:$KAMU_API_PORT"
 echo ''
 echo '==========================================================='
 echo '                      MINIO                                '

@@ -8,10 +8,10 @@ helmDefaults:
 
 ---
 repositories:
-  - name: jupyterhub
-    url: https://jupyterhub.github.io/helm-chart/
   - name: kamu
     url: https://kamu-data.github.io/helm-charts/
+  - name: jupyterhub
+    url: https://jupyterhub.github.io/helm-chart/
   - name: superset
     url: https://apache.github.io/superset/
 
