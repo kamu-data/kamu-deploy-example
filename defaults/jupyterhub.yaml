@@ -14,7 +14,12 @@ scheduling:
 singleuser:
   image:
     name: ghcr.io/kamu-data/kamu-cli-demo-jupyter
-    tag: "0.10.2"
+    tag: "0.11.1"
+  # TODO: Remove once Sparkmagic supports novebook >= 7.0.0
+  # See: https://github.com/jupyter-incubator/sparkmagic/issues/885
+  cmd:
+    - jupyterhub-singleuser
+    - --NotebookApp.show_banner=False
   # Use old Jupyter Notebook interface by default
   # See: https://z2jh.jupyter.org/en/latest/jupyterhub/customizing/user-environment.html#selecting-a-user-interface
   defaultUrl: /tree/
@@ -23,17 +28,11 @@ singleuser:
   storage:
     type: none
 hub:
-  extraConfig:
-    # Setting the `privileged` flag with `SYS_ADMIN` capabilities is necessary to allow `kamu-cli`
-    # to spawn podman containers from within the Jupyter pod.
-    myConfig.py: |
-      from kubernetes import client
-      def modify_pod_hook(spawner, pod):
-          pod.spec.containers[0].security_context = client.V1SecurityContext(
-              privileged=True,
-              capabilities=client.V1Capabilities(
-                  add=['SYS_ADMIN']
-              )
-          )
-          return pod
-      c.KubeSpawner.modify_pod_hook = modify_pod_hook
+  config:
+    KubeSpawner:
+      # TODO: Privileged mode is unfortunately needed to allow `kamu-cli`
+      # to spawn podman containers from within the Jupyter pod.
+      # There might be a way to reduce the scope of privileges.
+      # See: https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#module-kubespawner.spawner
+      allow_privilege_escalation: true
+      privileged: true

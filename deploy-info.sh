@@ -5,19 +5,45 @@ set -euo pipefail
 export NAMESPACE=${NAMESPACE:-default}
 export MINIKUBE_HOST=$(minikube ip)
 
-KAMU_API_PORT=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[0].nodePort}" services kamu-api-server)
-KAMU_WEB_UI_PORT=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[0].nodePort}" services kamu-web-ui)
-MINIO_API_PORT=$(kubectl get --namespace "${NAMESPACE}" -o jsonpath="{.spec.ports[0].nodePort}" services minio)
-MINIO_CONSOLE_PORT=$(kubectl get --namespace "${NAMESPACE}" -o jsonpath="{.spec.ports[1].nodePort}" services minio)
+service_node_port() {
+    svc="$2"
+    pname="$3"
+    port=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[?(@.name==\"$pname\")].nodePort}" services $svc || echo "")
+    eval "$1='$port'"
+}
+
+service_node_port "KAMU_API_REST_PORT" "kamu-api-server" "http"
+service_node_port "KAMU_API_FLIGHTSQL_PORT" "kamu-api-server" "flightsql"
+service_node_port "KAMU_WEB_UI_PORT" "kamu-web-ui" "http"
+service_node_port "JUPYTERHUB_PROXY_PORT" "proxy-public" "http"
+service_node_port "MINIO_API_PORT" "minio" "api"
+service_node_port "MINIO_CONSOLE_PORT" "minio" "console"
+
 MINIO_USER=$(kubectl get --namespace "${NAMESPACE}" secret minio-creds -o jsonpath='{.data.root_user}' | base64 -d)
 MINIO_PASSWORD=$(kubectl get --namespace "${NAMESPACE}" secret minio-creds -o jsonpath='{.data.root_password}' | base64 -d)
 
+if [ -n "$KAMU_WEB_UI_PORT" ]; then
 echo '==========================================================='
-echo '                      KAMU                                 '
+echo '                   Kamu Web UI                             '
 echo '-----------------------------------------------------------'
-echo "Kamu Web UI:      http://$MINIKUBE_HOST:$KAMU_WEB_UI_PORT"
-echo "Kamu API:         http://$MINIKUBE_HOST:$KAMU_API_PORT"
+echo "Web UI:           http://$MINIKUBE_HOST:$KAMU_WEB_UI_PORT"
 echo ''
+fi
+if [ -n "$KAMU_API_REST_PORT" ]; then
+echo '==========================================================='
+echo '                    Kamu Node                              '
+echo '-----------------------------------------------------------'
+echo "GraphQL / REST:   http://$MINIKUBE_HOST:$KAMU_API_REST_PORT"
+echo "FlightSQL:        http://$MINIKUBE_HOST:$KAMU_API_FLIGHTSQL_PORT"
+echo ''
+fi
+if [ -n "$JUPYTERHUB_PROXY_PORT" ]; then
+echo '==========================================================='
+echo '                   JupyterHub                              '
+echo '-----------------------------------------------------------'
+echo "Web UI:           http://$MINIKUBE_HOST:$JUPYTERHUB_PROXY_PORT"
+echo ''
+fi
 echo '==========================================================='
 echo '                      MINIO                                '
 echo '-----------------------------------------------------------'

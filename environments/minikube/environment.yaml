@@ -6,5 +6,8 @@ kamuApiServer:
 kamuWebUi:
   enabled: true
 
+jupyterHub:
+  enabled: false
+
 minio:
   enabled: true

@@ -1,0 +1,25 @@
+singleuser:
+  extraEnv:
+    AWS_ACCESS_KEY_ID: admin
+    AWS_SECRET_ACCESS_KEY: password123
+  memory:
+    guarantee: 1.6G
+  cpu:
+    guarantee: 0.5
+hub:
+  config:
+    JupyterHub:
+      authenticator_class: dummy
+    Authenticator:
+      admin_users:
+        - kamu
+      allowed_users:
+        - kamu
+        - user
+    DummyAuthenticator:
+      password: kamu
+proxy:
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30230
