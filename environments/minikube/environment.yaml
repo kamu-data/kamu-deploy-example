@@ -7,7 +7,7 @@ kamuWebUi:
   enabled: true
 
 jupyterHub:
-  enabled: false
+  enabled: true
 
 minio:
   enabled: true

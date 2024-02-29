@@ -2,6 +2,9 @@ singleuser:
   extraEnv:
     AWS_ACCESS_KEY_ID: admin
     AWS_SECRET_ACCESS_KEY: password123
+    KAMU_JWT_SECRET: secret123
+    KAMU_NODE_URL: odf+http://kamu-api-server:8080/
+    KAMU_WEB_UI_URL: http://localhost:4200/
   memory:
     guarantee: 1.6G
   cpu:
@@ -9,15 +12,50 @@ singleuser:
 hub:
   config:
     JupyterHub:
-      authenticator_class: dummy
+      # authenticator_class: dummy
+      authenticator_class: github
+    GitHubOAuthenticator:
+      client_id: b8c878755b4e2b930eec
+      client_secret: a7009e3d4f610e19aa00504d7bb0508b4698844b
+      oauth_callback_url: http://localhost:4300/hub/oauth_callback
+      allow_all: true
     Authenticator:
-      admin_users:
-        - kamu
-      allowed_users:
-        - kamu
-        - user
-    DummyAuthenticator:
-      password: kamu
+      # Necessary for token propagation below
+      enable_auth_state: true
+    CryptKeeper:
+      keys:
+        - 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    
+    # Authenticator:
+    #   admin_users:
+    #     - kamu
+    #   allowed_users:
+    #     - kamu
+    #     - user
+    # DummyAuthenticator:
+    #   password: kamu
+  extraConfig:
+    # Propagates GH token into the pod
+    # Source: https://github.com/jupyterhub/oauthenticator/blob/d7e07566c68f3c6a78411c9b5a7f26434e2cb3f1/examples/auth_state/jupyterhub_config.py#L19
+    authPassToken: |
+      from oauthenticator.github import GitHubOAuthenticator
+
+      class GitHubEnvAuthenticator(GitHubOAuthenticator):
+          async def pre_spawn_start(self, user, spawner):
+              auth_state = await user.get_auth_state()
+
+              if not auth_state:
+                  # user has no auth state
+                  return
+
+              # define some environment variables from auth_state
+              spawner.environment['GITHUB_TOKEN'] = auth_state['access_token']
+              spawner.environment['GITHUB_LOGIN'] = auth_state['github_user']['login']
+              spawner.environment['GITHUB_EMAIL'] = auth_state['github_user']['email']
+
+      c.JupyterHub.authenticator_class = GitHubEnvAuthenticator
+
+
 proxy:
   service:
     type: NodePort

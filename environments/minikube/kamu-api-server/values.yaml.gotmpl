@@ -1,6 +1,9 @@
 app:
   datasetRepositoryUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
-  jwtSecret: "secret123"
+  # Keep in sync with KAMU_JWT_SECRET in jupyterhub
+  jwtSecret: secret123
+  authGithubClientId: 361a3b4fda86d0234d2f
+  authGithubClientSecret: 465849325236ed49253993744069e1bec6808554
   config:
     auth:
       providers:
@@ -83,6 +86,9 @@ app:
               displayName: Bycatch Management Information System
               accountType: User
               avatarUrl: https://cdn-icons-png.flaticon.com/128/10197/10197245.png
+        
+        - kind: github
+
 
 
   awsCredentials:
