@@ -11,6 +11,18 @@ singleuser:
     guarantee: 0.5
 hub:
   config:
+    ## Use this configuration if you don't want to auth via GitHub
+    # JupyterHub:
+    #   authenticator_class: dummy
+    # Authenticator:
+    #   admin_users:
+    #     - kamu
+    #   allowed_users:
+    #     - kamu
+    #     - user
+    # DummyAuthenticator:
+    #   password: kamu
+
     JupyterHub:
       # authenticator_class: dummy
       authenticator_class: github
@@ -25,15 +37,6 @@ hub:
     CryptKeeper:
       keys:
         - 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-    
-    # Authenticator:
-    #   admin_users:
-    #     - kamu
-    #   allowed_users:
-    #     - kamu
-    #     - user
-    # DummyAuthenticator:
-    #   password: kamu
   extraConfig:
     # Propagates GH token into the pod
     # Source: https://github.com/jupyterhub/oauthenticator/blob/d7e07566c68f3c6a78411c9b5a7f26434e2cb3f1/examples/auth_state/jupyterhub_config.py#L19
