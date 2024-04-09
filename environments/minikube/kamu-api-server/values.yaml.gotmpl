@@ -1,6 +1,8 @@
 app:
   datasetRepositoryUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
-  apiExternalHttpScheme: "http"
+  apiBaseUrlPlatform: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30211"
+  apiBaseUrlRest: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201"
+  apiBaseUrlFlightsql: "grpc://{{ requiredEnv "MINIKUBE_HOST" }}:50050"
   # Keep in sync with KAMU_JWT_SECRET in jupyterhub
   jwtSecret: secret123
   authGithubClientId: 361a3b4fda86d0234d2f
@@ -87,10 +89,7 @@ app:
               displayName: Bycatch Management Information System
               accountType: User
               avatarUrl: https://cdn-icons-png.flaticon.com/128/10197/10197245.png
-        
         - kind: github
-
-
 
   awsCredentials:
     enabled: true
