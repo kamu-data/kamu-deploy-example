@@ -20,6 +20,7 @@ aws s3 cp --no-sign-request --recursive ${S3_EXAMPLE_REPO_URL} $TMP_DIR/
 # Upload repo data to local Minio
 AWS_ACCESS_KEY_ID=$MINIO_USER \
 AWS_SECRET_ACCESS_KEY=$MINIO_PASSWORD \
+AWS_SESSION_TOKEN="" \
 aws \
     --endpoint-url "http://${MINIKUBE_HOST}:${MINIO_API_PORT}" \
     s3 cp --recursive $TMP_DIR/ "s3://${MINO_BUCKET_NAME}/"
