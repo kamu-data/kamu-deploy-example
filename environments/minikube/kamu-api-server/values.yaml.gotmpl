@@ -2,7 +2,7 @@ app:
   datasetRepositoryUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
   apiBaseUrlPlatform: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30211"
   apiBaseUrlRest: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201"
-  apiBaseUrlFlightsql: "grpc://{{ requiredEnv "MINIKUBE_HOST" }}:50050"
+  apiBaseUrlFlightsql: "grpc://{{ requiredEnv "MINIKUBE_HOST" }}:30241"
   # Keep in sync with KAMU_JWT_SECRET in jupyterhub
   jwtSecret: secret123
   authGithubClientId: 361a3b4fda86d0234d2f
@@ -102,3 +102,4 @@ service:
   type: NodePort
   nodePorts:
     http: 30201
+    flightsql: 30241
