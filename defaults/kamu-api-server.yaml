@@ -1,0 +1,5 @@
+# This is a temporary measure to allow executing engine
+# containers with podman within the api-server pods.
+# See: https://github.com/kamu-data/kamu-node/issues/78
+securityContext:
+  privileged: true
