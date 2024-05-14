@@ -16,6 +16,7 @@ service_node_port "KAMU_API_REST_PORT" "kamu-api-server" "http"
 service_node_port "KAMU_API_FLIGHTSQL_PORT" "kamu-api-server" "flightsql"
 service_node_port "KAMU_WEB_UI_PORT" "kamu-web-ui" "http"
 service_node_port "JUPYTERHUB_PROXY_PORT" "proxy-public" "http"
+service_node_port "SUPERSET_PORT" "superset" "http"
 service_node_port "MINIO_API_PORT" "minio" "api"
 service_node_port "MINIO_CONSOLE_PORT" "minio" "console"
 
@@ -23,6 +24,13 @@ if [ -n "$KAMU_WEB_UI_PORT" ]; then
     echo "=============== Kamu Web UI ==============="
     echo "Web UI (fwd):     http://localhost:4200"
     echo "Web UI:           http://$MINIKUBE_HOST:$KAMU_WEB_UI_PORT"
+    echo ""
+fi
+if [ -n "$SUPERSET_PORT" ]; then
+    echo "================ Superset ================="
+    echo "Web UI (fwd):     http://localhost:4400"
+    echo "Web UI:           http://$MINIKUBE_HOST:$SUPERSET_PORT"
+    echo "Login / pwd:      kamu / kamu"
     echo ""
 fi
 if [ -n "$JUPYTERHUB_PROXY_PORT" ]; then
@@ -50,8 +58,15 @@ fi
 
 jobs=
 trap 'kill -HUP $jobs' INT TERM HUP
-kubectl port-forward service/kamu-web-ui 4200:http & jobs="$jobs $!"
-kubectl port-forward service/proxy-public 4300:http & jobs="$jobs $!"
+if [ -n "$KAMU_WEB_UI_PORT" ]; then
+    kubectl port-forward service/kamu-web-ui 4200:http & jobs="$jobs $!"
+fi
+if [ -n "$SUPERSET_PORT" ]; then
+    kubectl port-forward service/superset 4400:http & jobs="$jobs $!"
+fi
+if [ -n "$JUPYTERHUB_PROXY_PORT" ]; then
+    kubectl port-forward service/proxy-public 4300:http & jobs="$jobs $!"
+fi
 
 sleep 1
 echo "Press Ctrl+C to exit"

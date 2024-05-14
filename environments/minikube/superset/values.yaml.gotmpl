@@ -1,0 +1,63 @@
+# TODO: Superset chart does something weird when propagating password to postgres chart (its dependency)
+# It installs fine but on subsequent `helmfile apply` fails, complaining about the password
+# This works around it, but is clearly not a correct way to handle this
+global:
+  postgresql:
+    auth:
+      postgresPassword: superset
+
+# Default resources for all superset-related pods
+resources:
+  requests:
+    cpu: 200m
+    memory: 200Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+supersetNode:
+  # Pod is being killed too often on our slow cluster
+  livenessProbe:
+    timeoutSeconds: 5
+    failureThreshold: 5
+    periodSeconds: 15
+    successThreshold: 1
+bootstrapScript: |
+  #!/bin/bash
+  if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{`{{ .Values.runAsUser }}`}}" > ~/bootstrap; fi
+
+  # Patch Superset requirements not to create a version conflict
+  sed -i 's/pyarrow<13/pyarrow<14/g' apache_superset.egg-info/requires.txt
+
+  # Install FlightSQL deps
+  pip install pyarrow==13.0.0 flightsql-dbapi==0.2.1
+
+  # Replace logo
+  curl https://www.kamu.dev/images/tmp/kamu-logo-instead-of-superset.png > superset/static/assets/images/superset-logo-horiz.png
+init:
+  # loadExamples: true
+  createAdmin: true
+  adminUser:
+    username: kamu
+    password: kamu
+    firstname: Kamu
+    lastname: Admin
+    email: example@example.com
+configOverrides:
+  # Needed to work with SQLite examples database
+  allow_sqlite_for_examples: |
+    PREVENT_UNSAFE_DB_CONNECTIONS = False
+  # Sometimes flightsql entrypoint for sqlalchemy doesn't work and this explicit import
+  # seems to resolve the issue
+  force_load_flightsql: |
+    import flightsql.sqlalchemy
+extraEnv:
+  SERVER_WORKER_AMOUNT: 2
+
+# Specify a MapBox token if you'd like to use GIS plots
+# extraSecretEnv:
+#   MAPBOX_API_KEY: ...
+
+service:
+  type: NodePort
+  nodePort:
+    http: 30240
