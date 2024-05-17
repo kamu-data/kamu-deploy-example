@@ -4,7 +4,7 @@ app:
       repoUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
     auth:
       # Keep in sync with KAMU_JWT_SECRET in jupyterhub
-      jwtSecret: secret123
+      jwtSecret: secret1234567890
 
       providers:
         - kind: password
