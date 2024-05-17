@@ -5,7 +5,7 @@ namespace: default
 kamuApiServer:
   enabled: false
   chart: kamu/kamu-api-server
-  version: "0.20.2"
+  version: "0.23.3"
 
 kamuWebUi:
   enabled: false
