@@ -1,7 +1,8 @@
 app:
   config:
     apiServerGqlUrl: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201/graphql"
-    githubClientId: 361a3b4fda86d0234d2f
+    apiServerHttpUrl: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201"
+    githubClientId: "361a3b4fda86d0234d2f"
 
 service:
   type: NodePort

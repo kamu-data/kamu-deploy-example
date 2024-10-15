@@ -20,6 +20,12 @@ service_node_port "SUPERSET_PORT" "superset" "http"
 service_node_port "MINIO_API_PORT" "minio" "api"
 service_node_port "MINIO_CONSOLE_PORT" "minio" "console"
 
+if [ -n "$KAMU_API_REST_PORT" ]; then
+    echo "================ Kamu Node ================"
+    echo "REST / GraphQL:   http://$MINIKUBE_HOST:$KAMU_API_REST_PORT"
+    echo "FlightSQL:        http://$MINIKUBE_HOST:$KAMU_API_FLIGHTSQL_PORT"
+    echo ""
+fi
 if [ -n "$KAMU_WEB_UI_PORT" ]; then
     echo "=============== Kamu Web UI ==============="
     echo "Web UI (fwd):     http://localhost:4200"
@@ -37,12 +43,6 @@ if [ -n "$JUPYTERHUB_PROXY_PORT" ]; then
     echo "=============== JupyterHub ================"
     echo "Web UI (fwd):     http://localhost:4300"
     echo "Web UI:           http://$MINIKUBE_HOST:$JUPYTERHUB_PROXY_PORT"
-    echo ""
-fi
-if [ -n "$KAMU_API_REST_PORT" ]; then
-    echo "================ Kamu Node ================"
-    echo "GraphQL / REST:   http://$MINIKUBE_HOST:$KAMU_API_REST_PORT"
-    echo "FlightSQL:        http://$MINIKUBE_HOST:$KAMU_API_FLIGHTSQL_PORT"
     echo ""
 fi
 if [ -n "$MINIO_API_PORT" ]; then

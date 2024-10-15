@@ -7,10 +7,10 @@ kamuWebUi:
   enabled: true
 
 jupyterHub:
-  enabled: true
+  enabled: false
 
 minio:
   enabled: true
 
 superset:
-  enabled: true
+  enabled: false

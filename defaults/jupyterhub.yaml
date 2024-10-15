@@ -14,7 +14,7 @@ scheduling:
 singleuser:
   image:
     name: ghcr.io/kamu-data/kamu-cli-demo-jupyter
-    tag: "0.14.0"
+    tag: "0.16.2"
   # TODO: Remove once Sparkmagic supports novebook >= 7.0.0
   # See: https://github.com/jupyter-incubator/sparkmagic/issues/885
   cmd:
