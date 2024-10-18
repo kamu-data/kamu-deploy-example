@@ -3,7 +3,8 @@
 set -euo pipefail
 
 export NAMESPACE=${NAMESPACE:-default}
-export MINIKUBE_HOST=$(minikube ip)
+MINIKUBE_HOST=$(minikube ip)
+export MINIKUBE_HOST
 
 service_node_port() {
     svc="$2"
