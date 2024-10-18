@@ -3,7 +3,9 @@
 set -euo pipefail
 
 export NAMESPACE=${NAMESPACE:-default}
-export MINIKUBE_HOST=$(minikube ip)
+
+MINIKUBE_HOST=$(minikube ip)
+export MINIKUBE_HOST
 
 helmfile apply --namespace "${NAMESPACE}" --environment minikube
 
