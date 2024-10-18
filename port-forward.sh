@@ -9,7 +9,12 @@ export MINIKUBE_HOST
 service_node_port() {
     svc="$2"
     pname="$3"
-    port=$(kubectl get --namespace ${NAMESPACE} -o jsonpath="{.spec.ports[?(@.name==\"$pname\")].nodePort}" services $svc || echo "")
+    port=$(kubectl get \
+      --ignore-not-found \
+      --namespace "${NAMESPACE}" \
+      -o jsonpath="{.spec.ports[?(@.name==\"$pname\")].nodePort}" \
+      services "$svc" \
+    )
     eval "$1='$port'"
 }
 
