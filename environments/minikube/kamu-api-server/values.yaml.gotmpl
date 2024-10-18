@@ -6,7 +6,7 @@ app:
 
   config:
     repo:
-      repoUrl: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/datasets"
+      repoUrl: "s3+http://{{ requiredEnv "MINIKUBE_HOST" }}:30401/datasets"
       caching:
         registryCacheEnabled: true
         metadataLocalFsCachePath: /tmp/kamu-metadata-cache
@@ -14,7 +14,7 @@ app:
       maxFileSizeMb: 50
       storage:
         kind: s3
-        bucketS3Url: "s3+http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/upload"
+        bucketS3Url: "s3+http://{{ requiredEnv "MINIKUBE_HOST" }}:30401/upload"
     url:
       baseUrlPlatform: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30211"
       baseUrlRest: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30201"
@@ -89,7 +89,7 @@ app:
 
   awsCredentials:
     enabled: true
-    awsEndpoint: "http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000"
+    awsEndpoint: "http://{{ requiredEnv "MINIKUBE_HOST" }}:30401"
     awsAccessKeyId: admin
     awsSecretAccessKey: password123
     awsRegion: us-east-1
