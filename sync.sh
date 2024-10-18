@@ -10,5 +10,7 @@ kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply
 
 helmfile sync --namespace "${NAMESPACE}" --environment minikube
 
+echo ""
 echo "Deployment successful!"
+echo ""
 echo "Run ./port-forward.sh to get in"

@@ -9,5 +9,7 @@ export MINIKUBE_HOST
 
 helmfile apply --namespace "${NAMESPACE}" --environment minikube
 
+echo ""
 echo "Deployment successful!"
+echo ""
 echo "Run ./port-forward.sh to get in"
