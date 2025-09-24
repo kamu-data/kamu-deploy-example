@@ -14,7 +14,7 @@ scheduling:
 singleuser:
   image:
     name: ghcr.io/kamu-data/kamu-cli-demo-jupyter
-    tag: "0.17.2"
+    tag: "0.17.6"
   cmd:
     - jupyterhub-singleuser
   # Use old Jupyter Notebook interface by default

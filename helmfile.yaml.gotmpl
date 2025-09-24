@@ -12,6 +12,8 @@ repositories:
     url: https://kamu-data.github.io/helm-charts/
   - name: jupyterhub
     url: https://jupyterhub.github.io/helm-chart/
+  - name: qdrant
+    url: https://qdrant.github.io/qdrant-helm
   - name: superset
     url: https://apache.github.io/superset/
 
@@ -75,6 +77,19 @@ releases:
       - environments/{{ $.Environment.Name }}/minio/values.yaml.gotmpl
     secrets:
       - environments/{{ $.Environment.Name }}/minio/secrets.yaml
+  {{- end }}
+
+  {{- if .Environment.Values.qdrant.enabled }}
+  - name: qdrant
+    chart: {{ .Environment.Values.qdrant.chart }}
+    version: {{ .Environment.Values.qdrant.version }}
+    namespace: {{ .Environment.Values.namespace }}
+    missingFileHandler: Warn
+    values:
+      - defaults/qdrant.yaml
+      - environments/{{ $.Environment.Name }}/qdrant/values.yaml.gotmpl
+    secrets:
+      - environments/{{ $.Environment.Name }}/qdrant/secrets.yaml
   {{- end }}
 
   {{- if .Environment.Values.superset.enabled }}

@@ -12,5 +12,8 @@ jupyterHub:
 minio:
   enabled: true
 
+qdrant:
+  enabled: false
+
 superset:
   enabled: false
