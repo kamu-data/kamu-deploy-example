@@ -30,4 +30,4 @@ qdrant:
 superset:
   enabled: false
   chart: superset/superset
-  version: "0.10.14"
+  version: "0.15.0"
